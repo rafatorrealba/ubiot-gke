@@ -1,0 +1,25 @@
+apiVersion: v1
+kind: Deployment
+metadata:
+  name: fabric-tools
+spec:
+  volumes:
+  - name: fabric
+    persistentVolumeClaim:
+      claimName: fabric
+  - name: dockersocket
+    hostPath:
+      path: /var/run/docker.sock
+  containers:
+    - name: fabrictools
+      image: hyperledger/fabric-tools:2.2.1
+      imagePullPolicy: Always
+      command: ["sh", "-c", "--"]
+      env:
+      - name: FABRIC_CFG_PATH
+        value: "/home"
+      volumeMounts:
+        - mountPath: /fabric
+          name: fabric
+        - mountPath: /host/var/run/docker.sock
+          name: dockersocket

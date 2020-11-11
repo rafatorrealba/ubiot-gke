@@ -1,0 +1,17 @@
+#1. Docker file for setting up the Orderer
+FROM hyperledger/fabric-orderer:2.2.1
+
+
+#2. Create the folder for configurations
+RUN mkdir -p /var/hyperledger/orderer
+
+#3. Copy the crypto for orderer
+COPY ./fabric-samples/test-network/organizations/ordererOrganizations/example.com/orderers/orderer.example.com  /var/hyperledger/orderer
+
+#4. Copy the genesis file
+COPY ./fabric-samples/test-network/system-genesis-block/genesis.block  /var/hyperledger/orderer.genesis.block
+
+
+#5. Launch the Orderer
+CMD orderer
+

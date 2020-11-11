@@ -1,0 +1,116 @@
+# YAML for launching the orderer
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: orderer
+  labels:
+    app: orderer
+spec:
+  serviceName: orderer
+  # Single instance of the Orderer Pod is needed
+  replicas: 1
+  selector:
+    matchLabels:
+      app: orderer
+  template:
+    metadata:
+      labels:
+        app: orderer
+    spec:
+      containers:
+      - name: orderer
+
+        # Image used
+        image: gcr.io/guminator/orderer:v6
+
+        # Uncomment the following during development/testing of the image
+        # imagePullPolicy: Always
+        env:
+            - name: FABRIC_LOGGING_SPEC
+              value: DEBUG
+            - name: ORDERER_OPERATIONS_LISTENADDRESS
+              value: 0.0.0.0:8443
+            - name: ORDERER_METRICS_PROVIDER
+              value: prometheus
+            - name: ORDERER_GENERAL_GENESISFILE
+              value: /var/hyperledger/orderer.genesis.block
+            - name: ORDERER_GENERAL_GENESISMETHOD
+              value: file
+            - name: ORDERER_GENERAL_LISTENADDRESS
+              value: 0.0.0.0
+            - name: ORDERER_GENERAL_LOCALMSPDIR
+              value: /var/hyperledger/orderer/msp
+            - name: ORDERER_GENERAL_LOCALMSPID
+              value: OrdererMSP
+            - name: ORDERER_GENERAL_TLS_CERTIFICATE
+              value: /var/hyperledger/orderer/tls/server.crt
+            - name: ORDERER_GENERAL_TLS_ENABLED
+              value: "true"
+            - name: ORDERER_GENERAL_TLS_PRIVATEKEY
+              value: /var/hyperledger/orderer/tls/server.key
+            - name: ORDERER_GENERAL_TLS_ROOTCAS
+              value: "[/var/hyperledger/orderer/tls/ca.crt]"
+            - name: ORDERER_GENERAL_CLUSTER_CLIENTCERTIFICATE
+              value: /var/hyperledger/orderer/tls/server.crt
+            - name: ORDERER_GENERAL_CLUSTER_CLIENTPRIVATEKEY
+              value: /var/hyperledger/orderer/tls/server.key
+            - name: ORDERER_GENERAL_CLUSTER_ROOTCAS
+              value: "[/var/hyperledger/orderer/tls/ca.crt]"
+        volumeMounts:
+        # This is pointing to the PVC
+        - name: orderer-ledger
+          mountPath: /var/ledger
+
+  volumeClaimTemplates:
+  - metadata: 
+      name: orderer-ledger
+    spec:
+      accessModes: [ "ReadWriteOnce" ]
+      storageClassName: general
+      resources:
+        requests:
+          storage: 1Gi
+
+---
+# Expose the port 7050 as ClusterIP
+apiVersion: v1
+kind: Service
+metadata:
+  name: orderer-clusterip
+
+spec:
+  # This defines which pods are going to be represented by this Service
+  # The service becomes a network endpoint for either other services
+  # or maybe external users to connect to (eg browser)
+  selector:
+    app: orderer
+
+  ports:
+    - name: orderer-clusterip
+      port: 7050
+
+  type: ClusterIP
+
+---
+# Expose the port 30750 as node port - NEEDED if you
+# are interested in connecting to the Pods from the Host
+# machine - keep in mind you would need the IP for the node
+# port service
+apiVersion: v1
+kind: Service
+metadata:
+  name: orderer-nodeport
+
+spec:
+  # This defines which pods are going to be represented by this Service
+  # The service becomes a network endpoint for either other services
+  # or maybe external users to connect to (eg browser)
+  selector:
+    app: orderer
+
+  ports:
+    - name: orderer-nodeport
+      port: 30750
+      nodePort: 30750
+
+  type: NodePort
