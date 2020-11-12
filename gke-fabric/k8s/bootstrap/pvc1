@@ -1,0 +1,31 @@
+
+---
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: fabric-config
+  annotations:
+    volume.beta.kubernetes.io/storage-class: px-shared-sc
+spec:
+  accessModes:
+   # - ReadOnlyMany
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: 1Gi
+---
+
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: k8scc-transfer-pv
+  annotations:
+    volume.beta.kubernetes.io/storage-class: px-shared-sc
+spec:
+  accessModes:
+    #- ReadOnlyMany
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: 5Gi
+  
