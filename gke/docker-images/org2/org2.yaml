@@ -1,0 +1,100 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: org2peer0
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      name: org2peer0
+  template:
+    metadata:
+      labels:
+        name: org2peer0
+    spec:
+      volumes:
+      - name: dockersocket
+        hostPath:
+          path: /var/run/docker.sock
+      containers:
+      - name: org2
+        image: gcr.io/guminator/peer0-twinbiot:v1
+        command: ["sh", "-c", "peer node start"]
+        env:
+        - name: CORE_PEER_ADDRESSAUTODETECT
+          value: "true"
+        - name: CORE_PEER_ID
+          value: peer0.org2.example.com
+        - name: CORE_PEER_ADDRESS
+          value: peer0.org2.example.com:9051
+        - name: CORE_PEER_LISTENADDRESS
+          value: 0.0.0.0:9051
+        - name: CORE_PEER_EVENTS_ADDRESS
+          value: 0.0.0.0:9061
+        - name: CORE_PEER_CHAINCODELISTENADDRESS
+          value: 0.0.0.0:9052
+        - name: CORE_PEER_GOSSIP_BOOTSTRAP
+          value: peer0.org2.example.com:9051
+        - name: CORE_PEER_GOSSIP_ENDPOINT
+          value: peer0.org2.example.com:9051
+        - name: CORE_PEER_GOSSIP_EXTERNALENDPOINT
+          value: peer0.org2.example.com:9051
+        - name: CORE_PEER_GOSSIP_ORGLEADER
+          value: "false"
+        - name: CORE_PEER_GOSSIP_USELEADERELECTION
+          value: "true"
+        - name: CORE_PEER_PROFILE_ENABLED
+          value: "true"
+        - name: CORE_VM_ENDPOINT
+          value: unix:///host/var/run/docker.sock
+        - name: CORE_PEER_LOCALMSPID
+          value: Org2MSP
+        - name: CORE_PEER_MSPCONFIGPATH
+          value: /fabric/config/organizations/peerOrganizations/org2.example.com/peers/peer0.org2.example.com/msp
+        - name: FABRIC_LOGGING_SPEC
+          value: debug
+        - name: CORE_PEER_TLS_ENABLED
+          value: "true"
+        - name: CORE_PEER_TLS_CERT_FILE
+          value: /fabric/config/organizations/peerOrganizations/org2.example.com/peers/peer0.org2.example.com/tls/server.crt
+        - name: CORE_PEER_TLS_KEY_FILE
+          value: /fabric/config/organizations/peerOrganizations/org2.example.com/peers/peer0.org2.example.com/tls/server.key
+        - name: CORE_PEER_TLS_ROOTCERT_FILE
+          value: /fabric/config/organizations/peerOrganizations/org2.example.com/peers/peer0.org2.example.com/tls/ca.crt
+        - name: CORE_LEDGER_STATE_STATEDATABASE
+          value: "CouchDB"
+        - name: CORE_LEDGER_STATE_COUCHDBCONFIG_COUCHDBADDRESS
+          value: "localhost:5984"
+        - name: CORE_LEDGER_STATE_COUCHDBCONFIG_USERNAME
+          value: "admin"
+        - name: CORE_LEDGER_STATE_COUCHDBCONFIG_PASSWORD
+          value: "adminpw"
+        - name: FABRIC_CFG_PATH
+          value: /etc/hyperledger/fabric/
+        - name: ORDERER_
+          value: orderer:7050
+        volumeMounts:
+        - mountPath: /host/var/run/docker.sock
+          name: dockersocket
+    
+    
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: blockchain-org2peer1
+  labels:
+    run: blockchain-org2peer1
+spec:
+  type: ClusterIP 
+  selector:
+    name: org2peer1
+  ports:
+  - protocol: TCP
+    port: 9051
+    name: grpc
+  - protocol: TCP
+    port: 9061
+    name: events
+  

@@ -12,16 +12,18 @@ spec:
       labels:
         name: orderer
     spec:
-    #  volumes:
-     # - name: fabricfiles
-      #  persistentVolumeClaim:
-       #   claimName: fabric
+      volumes:
+      - name: fabricfiles
+        persistentVolumeClaim:
+          claimName: fabric
 
       containers:
       - name: orderer
-        image: gcr.io/guminator/orderer-twinbiot:v1
+        image: hyperledger/fabric-orderer:2.2.1
         command: ["sh", "-c", "orderer"]
         env:
+        - name: TZ
+          value: "America/Sao_Paulo"
         - name: ORDERER_CFG_PATH
           value: /fabric/
         - name: CONFIGTX_ORDERER_ADDRESSES
@@ -54,20 +56,6 @@ spec:
           value: /fabric/config/organizations/ordererOrganizations/example.com/orderers/orderer.example.com/tls/server.key
         - name: ORDERER_GENERAL_CLUSTER_ROOTCAS
           value: "[/fabric/config/organizations/ordererOrganizations/example.com/orderers/orderer.example.com/tls/ca.crt]"        
----
-
-
-apiVersion: v1
-kind: Service
-metadata:
-  name: orderer
-  labels:
-    run: orderer
-spec:
-  type: ClusterIP
-  selector:
-    name: orderer
-  ports:
-  - protocol: TCP
-    port: 7050
-    name: grpc
+        volumeMounts:
+        - mountPath: /fabric
+          name: fabricfiles
