@@ -75,13 +75,13 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: blockchain-org2peer1
+  name: org2peer0
   labels:
-    run: blockchain-org2peer1
+    run: org2peer0
 spec:
   type: ClusterIP 
   selector:
-    name: org2peer1
+    name: org2peer0
   ports:
   - protocol: TCP
     port: 9051
