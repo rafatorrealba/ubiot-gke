@@ -1,0 +1,64 @@
+# YAML for launching the orderer
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: twinbiot-orderer
+  labels:
+    app: twinbiot-orderer
+spec:
+  serviceName: twinbiot-orderer
+  # Single instance of the Orderer Pod is needed
+  replicas: 1
+  selector:
+    matchLabels:
+      app: twinbiot-orderer
+  template:
+    metadata:
+      labels:
+        app: twinbiot-orderer
+    spec:
+      containers:
+      - name: twinbiot-orderer
+
+        # Image used
+        image: gcr.io/guminator/twinbiot-orderer:2.2.1
+
+        # Uncomment the following during development/testing of the image
+        # imagePullPolicy: Always
+        env:
+          # Points to the orderer.yaml
+          - name: FABRIC_CFG_PATH
+            value: /var/hyperledger/config
+          - name: ORDERER_GENERAL_GENESISFILE
+            value: /var/hyperledger/config/system-genesis-block/genesis.block
+          # Level of logging
+          - name: FABRIC_LOGGING_SPEC
+            value: DEBUG
+        volumeMounts:
+        # This is pointing to the PVC
+        - name: orderer-ledger
+          mountPath: /var/hyperledger/production
+
+  volumeClaimTemplates:
+  - metadata: 
+      name: orderer-ledger
+    spec:
+      accessModes: [ "ReadWriteOnce" ]
+      storageClassName: general
+      resources:
+        requests:
+          storage: 1Gi
+
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: orderer-example
+spec:
+  selector:
+    app: "twinbiot-orderer"
+  ports:
+  - name: "grpc"
+    port: 7050
+    protocol: TCP
+    targetPort: 7050

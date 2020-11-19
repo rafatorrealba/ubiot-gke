@@ -1,0 +1,27 @@
+---
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: fabric-config
+spec:
+  capacity:
+    storage: 2Gi
+  accessModes:
+    - ReadWriteMany
+  nfs:
+    server: 10.96.8.25
+    path: "/"
+
+
+---
+#kind: PersistentVolumeClaim
+#apiVersion: v1
+#metadata:
+ # name: k8scc-transfer-pv
+#spec:
+ # accessModes:
+  #  - ReadWriteMany
+  #resources:
+   # requests:
+    #  storage: 5Gi
+ # storageClassName: standard
