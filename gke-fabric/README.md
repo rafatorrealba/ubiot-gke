@@ -12,9 +12,8 @@ note: you must have gke cluster deployed
 cd ubiot-network/test-network
 
 ./network.sh up createChannel -ca
-docker rm -f $(docker ps -aq)
 
-​
+docker rm -f $(docker ps -aq)
 
 docker volume prune -f
 
