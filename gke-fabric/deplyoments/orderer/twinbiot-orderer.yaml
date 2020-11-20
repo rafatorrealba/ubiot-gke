@@ -29,8 +29,8 @@ spec:
           # Points to the orderer.yaml
           - name: FABRIC_CFG_PATH
             value: /var/hyperledger/config
-          - name: ORDERER_GENERAL_GENESISFILE
-            value: /var/hyperledger/config/system-genesis-block/genesis.block
+          #- name: ORDERER_GENERAL_GENESISFILE
+           # value: /var/hyperledger/config/system-genesis-block/genesis.block
           # Level of logging
           - name: FABRIC_LOGGING_SPEC
             value: DEBUG
