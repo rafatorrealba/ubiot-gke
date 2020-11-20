@@ -21,7 +21,7 @@ spec:
       - name: twinbiot-orderer
 
         # Image used
-        image: gcr.io/guminator/twinbiot-orderer:2.2.1
+        image: gcr.io/guminator/twinbiot-orderer:1.0
 
         # Uncomment the following during development/testing of the image
         # imagePullPolicy: Always
