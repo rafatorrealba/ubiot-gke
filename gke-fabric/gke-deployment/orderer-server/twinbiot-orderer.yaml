@@ -55,7 +55,7 @@ spec:
       - name: orderer
         persistentVolumeClaim:
           claimName: orderer.example.com
-          
+
 
 
 ---
@@ -71,7 +71,7 @@ spec:
     port: 7050
     protocol: TCP
     targetPort: 7050
---- 
+---
 apiVersion: v1
 kind: PersistentVolume
 metadata:
@@ -97,4 +97,3 @@ spec:
   resources:
     requests:
       storage: 1Gi
-
