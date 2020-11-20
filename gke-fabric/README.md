@@ -1,4 +1,4 @@
-#Working directory:
+# Working directory:
 
 1) dockerfiles for orderer, org1, org2 docker images.
 
@@ -7,7 +7,7 @@
 
 note: you must have gke cluster deployed
 
-#Generate artifacts
+# Generate artifacts
 
 cd ubiot-network/test-network
 
