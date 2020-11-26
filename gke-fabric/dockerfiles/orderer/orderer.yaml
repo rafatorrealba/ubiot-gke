@@ -20,7 +20,7 @@ General:
 
     # TLS: TLS settings for the GRPC server.
     TLS:
-        Enabled: true
+        Enabled: false
         # PrivateKey governs the file location of the private key of the TLS certificate.
         PrivateKey: organizations/ordererOrganizations/example.com/orderers/orderer.example.com/tls/server.key
         # Certificate governs the file location of the server TLS certificate.
@@ -75,7 +75,7 @@ General:
     GenesisMethod: file
 
     # The file containing the genesis block to use when initializing the orderer system channel
-    GenesisFile: organizations/system-genesis-block/genesis.block
+    GenesisFile: system-genesis-block/genesis.block
 
     # LocalMSPDir is where to find the private crypto material needed by the
     # orderer. It is set relative here as a default for dev environments but

@@ -9,11 +9,12 @@ FROM hyperledger/fabric-orderer:2.2.1
 RUN mkdir -p /var/hyperledger/config
 
 #3. Copy the crypto for orderer
-COPY ./ubiot-network/test-network/ /var/hyperledger/config/
+
+COPY ./ubiot-gke/gke-fabric/organizations /var/hyperledger/config
 
 
 #4. Copy the orderer YAML
-COPY ./ubiot-network/gke-fabric/dockerfiles/orderer/orderer.yaml /var/hyperledger/config
+COPY ./ubiot-gke/gke-fabric/dockerfiles/orderer/orderer.yaml /var/hyperledger/config
 
 #5. Launch the Orderer
 CMD orderer

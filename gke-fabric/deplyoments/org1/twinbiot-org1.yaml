@@ -19,7 +19,7 @@ spec:
       containers:
       - name: twinbiot-org1
         # Image used
-        image: gcr.io/guminator/twinbiot-org1:1.0
+        image: gcr.io/guminator/twinbiot-org1:4.4
         # Uncomment the following during development/testing of the image
         # imagePullPolicy: Always
         env:

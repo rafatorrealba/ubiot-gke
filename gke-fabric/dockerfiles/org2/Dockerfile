@@ -3,20 +3,23 @@ FROM hyperledger/fabric-peer:2.2.1
 
 #1. Create the folder for configurations
 RUN mkdir -p /var/hyperledger/config
-RUN mkdir -p /var/hyperledger/config/chaincode
-RUN mkdir -p /var/hyperledger/config/scripts
+RUN mkdir -p /var/hyperledger/chaincode
+RUN mkdir -p /var/hyperledger/scripts
 
 #2. Copy the crypto for peer crypto
-COPY ./ubiot-network/test-network/ /var/hyperledger/config
+COPY ./ubiot-gke/gke-fabric/organizations /var/hyperledger/config
+COPY ./ubiot-gke/gke-fabric/channel-artifacts /var/hyperledger/config
+COPY ./ubiot-gke/gke-fabric/chaincode /var/hyperledger/chaincode
+
 
 
 ##### Copy the core.yaml file that is used by Peer #####
 #3. Copy the core YAML
-COPY ./ubiot-network/gke-fabric/dockerfiles/org1/core.yaml /var/hyperledger/config
+COPY ./ubiot-gke/gke-fabric/dockerfiles/org1/core.yaml /var/hyperledger/config
 
 ##### Copy the utility scripts #####
 #4. Copy the bins
-COPY ./ubiot-network/gke-fabric/scripts/ /var/hyperledger/scripts/
+COPY ./ubiot-gke/gke-fabric/scripts/ /var/hyperledger/scripts/
 
 ##### Setup the environment for executing peer commands #####
 #5. Set the working dir

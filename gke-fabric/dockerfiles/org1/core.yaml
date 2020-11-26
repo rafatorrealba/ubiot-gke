@@ -252,7 +252,7 @@ peer:
     # TLS Settings
     tls:
         # Require server-side TLS
-        enabled:  true
+        enabled:  false
         # Require client certificates / mutual TLS.
         # Note that clients that are not configured to use a certificate will
         # fail to connect to the peer.
