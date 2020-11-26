@@ -26,9 +26,9 @@ docker push gcr.io/guminator/twinbiot-orderer:1.0
 
 2) org1 and org2
 
-docker build -t gcr.io/guminator/twinbiot-org1:1.0  /home/user/ubiot-network/gke-fabric/dockerfiles/org1/Dockerfile
+docker build -t gcr.io/guminator/twinbiot-org1:1.0  /home/user/ubiot-gke/gke-fabric/dockerfiles/org1/Dockerfile
 
-docker build -t gcr.io/guminator/twinbiot-org2:1.0  /home/user/ubiot-network/gke-fabric/dockerfiles/org2/Dockerfile$
+docker build -t gcr.io/guminator/twinbiot-org2:1.0  /home/user/ubiot-gke/gke-fabric/dockerfiles/org2/Dockerfile
 
 docker push  gcr.io/guminator/twinbiot-org1:1.0 
 
