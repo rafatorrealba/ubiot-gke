@@ -28,8 +28,6 @@ RUN  echo "cd /var/hyperledger/scripts" >> $HOME/.bashrc
 #6. Set the context for Admin user
 RUN echo ". /var/hyperledger/scripts/set-context.sh" >> $HOME/.bashrc
 
-EXPOSE 7050
-
 #7. Launch the peer
 CMD peer node start
 
