@@ -9,13 +9,7 @@ note: you must have gke cluster deployed
 
 # Generate artifacts
 
-cd ubiot-network/test-network
-
-./network.sh up createChannel -ca
-
-docker rm -f $(docker ps -aq)
-
-docker volume prune -f
+./generate.sh start
 
 # Create docker images
 
@@ -40,18 +34,18 @@ docker push  gcr.io/guminator/twinbiot-org2:1.0
 
 cd deployments
 
-kubectl apply -f orderer/
+kubectl apply -f  twinbiot-orderer.yaml
 
-kubectl apply -f org1/
+kubectl apply -f twinbiot-org1.yaml
 
-kubectl apply -f org2/
+kubectl apply -f twinbiot-org2.yaml
 
 
 # Delete gke deployments
 
-kubectl delete -f orderer/
+kubectl delete -f twinbiot-orderer.yaml
 
-kubectl delete -f org1/
+kubectl delete -f twinbiot-org2.yaml
 
-kubectl delete -f org2/
+kubectl delete -f twinbiot-org1.yaml
 
