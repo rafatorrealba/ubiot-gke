@@ -38,19 +38,19 @@ spec:
           - name: FABRIC_LOGGING_SPEC
             value: INFO
           - name: CORE_PEER_ID
-            value: peer0.org2.example.com
+            value: org2
           - name: CORE_PEER_ADDRESS
-            value: peer0.org2.example.com:9051
+            value: org2:9051
           - name: CORE_PEER_LISTENADDRESS
             value: 0.0.0.0:9051
           - name: CORE_PEER_CHAINCODEADDRESS
-            value: peer0.org2.example:9052  
+            value: org2:9052
           - name: CORE_PEER_CHAINCODELISTENADDRESS
             value: 0.0.0.0:9052
           - name: CORE_PEER_GOSSIP_BOOTSTRAP
-            value: peer0.org2.example.com:9051
+            value: org2:9051
           - name: CORE_PEER_GOSSIP_EXTERNALENDPOINT
-            value: peer0.org2.example.com:9051
+            value: org2:9051
           - name: CORE_PEER_GOSSIP_ORGLEADER
             value: "false"
           - name: CORE_PEER_GOSSIP_USELEADERELECTION
@@ -79,6 +79,12 @@ spec:
         volumeMounts:
         - name: org2
           mountPath: /var/hyperledger/production/org2
+        - name: dockersock
+          mountPath: /var/run/docker.sock
+      volumes:
+      - name: dockersock
+        hostPath:
+          path: /var/run/docker.sock
   volumeClaimTemplates:
   - metadata:
       name: org2

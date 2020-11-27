@@ -31,20 +31,20 @@ spec:
       terminationGracePeriodSeconds: 10
       containers:
       - name: orderer
-        image: gcr.io/guminator/twinbiot-orderer:4.3
+        image: gcr.io/guminator/twinbiot-orderer:1.4
         env:
           - name: ORDERER_GENERAL_LISTENADDRESS
-            value: 0.0.0.0  
+            value: 0.0.0.0
           - name: ORDERER_GENERAL_LISTENPORT
             value: "7050"
           - name: ORDERER_GENERAL_GENESISFILE
             value: /var/hyperledger/config/system-genesis-block/genesis.block
           - name: ORDERER_GENERAL_GENESISMETHOD
-            value: file  
+            value: file
           - name: ORDERER_GENERAL_TLS_ENABLED
-            value: "true"  
+            value: "true"
           - name: ORDERER_GENERAL_LOCALMSPID
-            value: OrdererMSP  
+            value: OrdererMSP
           - name: ORDERER_GENERAL_LOCALMSPDIR
             value: /var/hyperledger/config/organizations/ordererOrganizations/example.com/orderers/orderer.example.com/msp
           - name: FABRIC_LOGGING_SPEC
@@ -60,7 +60,7 @@ spec:
           - name: ORDERER_GENERAL_CLUSTER_CLIENTPRIVATEKEY
             value: /var/hyperledger/config/organizations/ordererOrganizations/example.com/orderers/orderer.example.com/tls/server.key
           - name: ORDERER_GENERAL_CLUSTER_ROOTCAS
-            value: "[/var/hyperledger/config/organizations/ordererOrganizations/example.com/orderers/orderer.example.com/tls/ca.crt]"    
+            value: "[/var/hyperledger/config/organizations/ordererOrganizations/example.com/orderers/orderer.example.com/tls/ca.crt]"
         ports:
         - containerPort: 7050
           name: orderer
@@ -75,4 +75,3 @@ spec:
       resources:
         requests:
           storage: 1Gi
-

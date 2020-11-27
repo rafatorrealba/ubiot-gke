@@ -13,6 +13,9 @@ PeerOrgs:
   - Name: Org2
     Domain: org2.example.com
     EnableNodeOUs: true
+    Specs:
+      - Hostname: peer0
+        CommonName: peer0-org2
     # ---------------------------------------------------------------------------
     # "Specs"
     # ---------------------------------------------------------------------------

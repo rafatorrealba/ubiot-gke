@@ -45,8 +45,9 @@ FABRIC_ROOT=$GOPATH/src/github.com/hyperledger/fabric
 
 function generateCerts(){
 
+
     if [ ! -f $GOPATH/bin/cryptogen ]; then
-        go get github.com/hyperledger/fabric/common/tools/cryptogen
+        go get github.com/hyperledger/fabric/cmd/cryptogen
     fi
 
     echo
@@ -71,7 +72,7 @@ function generateChannelArtifacts(){
         fi
 
         if [ ! -f $GOPATH/bin/configtxgen ]; then
-        go get github.com/hyperledger/fabric/common/tools/configtxgen
+        go get go get github.com/hyperledger/fabric/cmd/configtxgen
     fi
 
     echo
@@ -89,7 +90,7 @@ function generateChannelArtifacts(){
         echo "#################################################################"
         $GOPATH/bin/configtxgen -configPath configtx -profile TwoOrgsChannel -outputAnchorPeersUpdate channel-artifacts/Org1Anchors.tx  -channelID "mychannel" -asOrg Org1MSP
 
-        
+
         echo "#################################################################"
         echo "#######    Generating anchor peer update for Org2MSP   ##########"
         echo "#################################################################"
@@ -116,21 +117,14 @@ function cleanNetwork() {
             rm -rf ./channel-artifacts
     fi
 
-    if [ -d ./crypto-config ]; then
+    if [ -d ./organizations ]; then
             rm -rf ./crypto-config
     fi
 
-    if [ -d ./tools ]; then
-            rm -rf ./tools
+    if [ -d ./system-genesis-block ]; then
+            rm -rf ./system-genesis-block/*
     fi
 
-    if [ -f ./docker-compose.yaml ]; then
-        rm ./docker-compose.yaml
-    fi
-
-    if [ -f ./docker-compose.yamlt ]; then
-        rm ./docker-compose.yamlt
-    fi
 
     # This operations removes all docker containers and images regardless
     #
@@ -165,4 +159,3 @@ case $COMMAND in
         echo "Useage: networkOps.sh start | status | clean | cli "
         exit 1;
 esac
-
