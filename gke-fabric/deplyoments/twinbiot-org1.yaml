@@ -21,9 +21,9 @@ metadata:
 spec:
   selector:
     matchLabels:
-      app: peer0-org1 # Label selector that determines which Pods belong to the StatefulSet
+      app:  peer0-org1 # Label selector that determines which Pods belong to the StatefulSet
                  # Must match spec: template: metadata: labels
-  serviceName: "peer0-org1-example"
+  serviceName: "peer0-org1"
   replicas: 1
   template:
     metadata:
@@ -32,8 +32,8 @@ spec:
     spec:
       terminationGracePeriodSeconds: 10
       containers:
-      - name: peer0-org1
-        image: gcr.io/guminator/twinbiot-org1:1.3
+      - name:  peer0-org1
+        image: gcr.io/guminator/twinbiot-org1:5.0
         env:
           - name: FABRIC_LOGGING_SPEC
             value: INFO
@@ -62,15 +62,15 @@ spec:
           - name: CORE_PEER_LOCALMSPID
             value: Org1MSP
           - name: CORE_PEER_MSPCONFIGPATH
-            value: /var/hyperledger/config/peerOrganizations/org1.example.com/peers/peer0.org1.example.com/msp
+            value: /var/hyperledger/config/peerOrganizations/org1.example.com/peers/peer0-org1/msp
           - name: CORE_PEER_TLS_ENABLED
             value: "true"
           - name: CORE_PEER_TLS_CERT_FILE
-            value: /var/hyperledger/config/peerOrganizations/org1.example.com/peers/peer0.org1.example.com/tls/server.crt
+            value: /var/hyperledger/config/peerOrganizations/org1.example.com/peers/peer0-org1/tls/server.crt
           - name: CORE_PEER_TLS_KEY_FILE
-            value: /var/hyperledger/config/peerOrganizations/org1.example.com/peers/peer0.org1.example.com/tls/server.key
+            value: /var/hyperledger/config/peerOrganizations/org1.example.com/peers/peer0-org1/tls/server.key
           - name: CORE_PEER_TLS_ROOTCERT_FILE
-            value: /var/hyperledger/config/peerOrganizations/org1.example.com/peers/peer0.org1.example.com/tls/ca.crt
+            value: /var/hyperledger/config/peerOrganizations/org1.example.com/peers/peer0-org1/tls/ca.crt
         ports:
         - containerPort: 7051
           name: org1
