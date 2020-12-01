@@ -1,40 +1,42 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: orderer
+  name: orderer-example-com
   labels:
-    app: orderer
+    app: orderer-example-com
 spec:
   ports:
   - port: 7050
     name: orderer
   clusterIP: None
   selector:
-    app: orderer
+    app: orderer-example-com
 ---
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
-  name: orderer
+  name: orderer-example-com
 spec:
   selector:
     matchLabels:
-      app: orderer # Label selector that determines which Pods belong to the StatefulSet
+      app: orderer-example-com # Label selector that determines which Pods belong to the StatefulSet
                  # Must match spec: template: metadata: labels
-  serviceName: "orderer"
+  serviceName: "orderer-example-com"
   replicas: 1
   template:
     metadata:
       labels:
-        app: orderer # Pod template's label selector
+        app: orderer-example-com # Pod template's label selector
     spec:
       terminationGracePeriodSeconds: 10
       containers:
-      - name: orderer
-        image: gcr.io/guminator/twinbiot-orderer:5.0
+      - name: orderer-example-com
+        image: gcr.io/guminator/twinbiot-orderer:1.6
         env:
           - name: ORDERER_GENERAL_LISTENADDRESS
             value: 0.0.0.0
+          #- name: FABRIC_CFG_PATH
+          #  value: /var/hyperledger/config/configtx
           - name: ORDERER_GENERAL_LISTENPORT
             value: "7050"
           - name: ORDERER_GENERAL_GENESISFILE

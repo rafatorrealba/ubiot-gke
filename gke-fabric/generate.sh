@@ -88,14 +88,14 @@ function generateChannelArtifacts(){
         echo "#################################################################"
         echo "#######    Generating anchor peer update for Org1MSP   ##########"
         echo "#################################################################"
-        $GOPATH/configtxgen -configpath configtx -profile TwoOrgsChannel -outputAnchorPeersUpdate ./channel-artifacts/Org2MSPanchors.tx -channelID mychannel -asOrg Org1MSP
+        $GOPATH/bin/configtxgen -configPath configtx -profile TwoOrgsChannel -outputAnchorPeersUpdate ./channel-artifacts/Org1MSPanchors.tx -channelID mychannel -asOrg Org1MSP
 
 
 
         echo "#################################################################"
         echo "#######    Generating anchor peer update for Org2MSP   ##########"
         echo "#################################################################"
-        $GOPATH/bin/configtxgen -configpath configtx -profile TwoOrgsChannel -outputAnchorPeersUpdate ./channel-artifacts/Org2MSPanchors.tx -channelID mychannel -asOrg Org2MSP
+        $GOPATH/bin/configtxgen -configPath configtx -profile TwoOrgsChannel -outputAnchorPeersUpdate ./channel-artifacts/Org2MSPanchors.tx -channelID mychannel -asOrg Org2MSP
 
 }
 
@@ -119,7 +119,7 @@ function cleanNetwork() {
     fi
 
     if [ -d ./organizations ]; then
-            rm -rf ./crypto-config
+            rm -rf ./organizations
     fi
 
     if [ -d ./system-genesis-block ]; then

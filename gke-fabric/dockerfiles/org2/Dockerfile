@@ -10,7 +10,7 @@ RUN mkdir -p /var/hyperledger/scripts
 COPY ./ubiot-gke/gke-fabric/organizations /var/hyperledger/config
 COPY ./ubiot-gke/gke-fabric/channel-artifacts /var/hyperledger/config
 COPY ./ubiot-gke/gke-fabric/chaincode /var/hyperledger/chaincode
-
+COPY ./ubiot-gke/gke-fabric/configtx /var/hyperledger/config/
 
 
 ##### Copy the core.yaml file that is used by Peer #####
