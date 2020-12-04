@@ -33,24 +33,26 @@ spec:
       terminationGracePeriodSeconds: 10
       containers:
       - name:  peer0-org2-example-com
-        image: gcr.io/guminator/twinbiot-orgs:1.6
+        image: gcr.io/guminator/twinbiot-orgs:1.7
         env:
           - name: FABRIC_LOGGING_SPEC
             value: INFO
+          - name: CORE_PEER_ADDRESSAUTODETECT
+            value: "true"
           - name: CORE_PEER_ID
-            value: peer0.org2.example.com
+            value: peer0-org2-example-com
           - name: CORE_PEER_ADDRESS
-            value: peer0.org2.example.com:9051
+            value: peer0-org2-example-com:9051
           - name: CORE_PEER_LISTENADDRESS
             value: 0.0.0.0:9051
-          - name: CORE_PEER_CHAINCODEADDRESS
-            value: peer0.org2.example.com:9052
+          #- name: CORE_PEER_CHAINCODEADDRESS
+          #  value: peer0-org2-example-com:9052
           - name: CORE_PEER_CHAINCODELISTENADDRESS
             value: 0.0.0.0:9052
           - name: CORE_PEER_GOSSIP_BOOTSTRAP
-            value: peer0.org2.example.com:9051
+            value: peer0-org2-example-com:9051
           - name: CORE_PEER_GOSSIP_EXTERNALENDPOINT
-            value: peer0.org2.example.com:9051
+            value: peer0-org2-example-com:9051
           - name: CORE_PEER_GOSSIP_ORGLEADER
             value: "false"
           - name: CORE_PEER_GOSSIP_USELEADERELECTION
@@ -58,7 +60,9 @@ spec:
           - name: CORE_PEER_PROFILE_ENABLED
             value: "true"
           - name: CORE_VM_ENDPOINT
-            value: unix:///var/run/docker.sock
+            value: unix:///host/var/run/docker.sock
+          - name: CORE_VM_DOCKER_ATTACHSTDOUT
+            value: "true"
           - name: CORE_PEER_LOCALMSPID
             value: Org2MSP
           - name: CORE_PEER_MSPCONFIGPATH
@@ -80,7 +84,7 @@ spec:
         - name: org2
           mountPath: /var/hyperledger/production
         - name: dockersock
-          mountPath: /var/run/docker.sock
+          mountPath: /host/var/run/docker.sock
       volumes:
       - name: dockersock
         hostPath:
