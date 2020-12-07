@@ -281,7 +281,7 @@ function networkUp() {
     COMPOSE_FILES="${COMPOSE_FILES} -f ${COMPOSE_FILE_COUCH}"
   fi
 
-  IMAGE_TAG=$IMAGETAG docker-compose ${COMPOSE_FILES} up -d 2>&1
+   IMAGE_TAG=$IMAGETAG docker-compose ${COMPOSE_FILES} up -d 2>&1
 
   docker ps -a
   if [ $? -ne 0 ]; then

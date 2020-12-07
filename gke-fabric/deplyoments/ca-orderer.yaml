@@ -45,13 +45,13 @@ spec:
         - containerPort: 9054
           name: ca-orderer
         volumeMounts:
-        - name: ca-orderer
-          mountPath: /var/hyperledger/config/organizations/fabric-ca/orderer
+        - name: fabric-config
+          mountPath: /var/hyperledger/config/organizations
   volumeClaimTemplates:
   - metadata:
-      name: ca-orderer
+      name: fabric-config
     spec:
-      accessModes: [ "ReadWriteOnce" ]
+      accessModes: [ "ReadOnlyMany" ]
       resources:
         requests:
-          storage: 1Gi
+          storage: 5Gi
