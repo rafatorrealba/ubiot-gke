@@ -1,0 +1,57 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: ca-orderer
+  labels:
+    app: ca-orderer
+spec:
+  ports:
+  - port: 9054
+    name: ca-orderer
+  clusterIP: None
+  selector:
+    app: ca-orderer
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: ca-orderer
+spec:
+  selector:
+    matchLabels:
+      app: ca-orderer # Label selector that determines which Pods belong to the StatefulSet
+                 # Must match spec: template: metadata: labels
+  serviceName: "ca-orderer"
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: ca-orderer # Pod template's label selector
+    spec:
+      terminationGracePeriodSeconds: 10
+      containers:
+      - name:  ca-orderer
+        image: gcr.io/guminator/ca-server:1.0
+        env:
+          - name: FABRIC_CA_HOME
+            value: /var/hyperledger/config/organizations/fabric-ca/ordererOrg
+          - name: FABRIC_CA_SERVER_CA_NAME
+            value: ca-orderer
+          - name: FABRIC_CA_SERVER_PORT
+            value: "9054"
+          - name: FABRIC_CA_SERVER_TLS_ENABLED
+            value: "true"
+        ports:
+        - containerPort: 9054
+          name: ca-orderer
+        volumeMounts:
+        - name: ca-orderer
+          mountPath: /var/hyperledger/config/organizations/fabric-ca/ordererOrg
+  volumeClaimTemplates:
+  - metadata:
+      name: ca-orderer
+    spec:
+      accessModes: [ "ReadWriteOnce" ]
+      resources:
+        requests:
+          storage: 5Gi

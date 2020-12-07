@@ -1,0 +1,54 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ca-org2
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      name: ca-org2
+  template:
+    metadata:
+      labels:
+        name: ca-org2
+    spec:
+      volumes:
+      - name: fabricfiles
+        persistentVolumeClaim:
+          claimName: fabric
+
+      containers:
+      - name: orderer
+        image: hyperledger/fabric-ca:1.4.9
+        command: ["sh", "-c", "fabric-ca-server start -b admin:adminpw -d"]
+         ports:
+        - containerPort: 7054
+        env:
+        - name: FABRIC_CA_HOME
+          value: /fabric/config/organizations/fabric-ca/org1
+        - name: FABRIC_CA_SERVER_CA_NAME
+          value: ca-org2
+        - name: FABRIC_CA_SERVER_PORT
+          value: "8054"
+        - name: FABRIC_CA_SERVER_TLS_ENABLED
+          value: "true"
+        volumeMounts:
+        - mountPath: /fabric
+          name: fabricfiles
+
+  ---
+
+  apiVersion: v1
+  kind: Service
+  metadata:
+    name: ca-org2
+    labels:
+      run: ca-org2
+  spec:
+    type: ClusterIP
+    selector:
+      name: ca-org2
+    ports:
+    - protocol: TCP
+      port: 7054
+      name: grpc
