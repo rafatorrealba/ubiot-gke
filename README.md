@@ -40,7 +40,7 @@ git clone https://github.com/rafatorrealba/ubiot-gke.git
 
 # go to the workdir 
 
- cd gke-fabric/deployment
+ cd gke-fabric/deployments
 
 # deploy the nfs-server.
 
@@ -249,7 +249,7 @@ exit
 
 ```
 
-# in the same folder gke-fabric/deployment run
+# in the same folder gke-fabric/deployments run
 
 kubectl apply -f twinbiot-app/
 
