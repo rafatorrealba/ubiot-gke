@@ -34,15 +34,23 @@ gcloud compute disks create --size=10GB --zone=us-central1-c gce-nfs-disk
 
 2.2- create nfs server.
 
+# clone the repository.
+
+git clone https://github.com/rafatorrealba/ubiot-gke.git
+
+# go to the workdir 
+
  cd gke-fabric/deployment
- 
+
+# deploy the nfs-server.
+
  kubectl apply -f nfs-server/
  
  # You can verify the pod with the "kubectl get pods" command, if the service is running it was created correctly.
  
 ```
 
-3) create Persistent Volume and Volume Claim
+3) Create Persistent Volume and Volume Claim
  
  ```
  # in the same file with you deploy nfs-server.
@@ -70,11 +78,8 @@ kubectl apply -f tools.yaml
 
 # this not generate problem with network because only use de tool 
 # for generate data in a persistent volume.
-```
 
-4.1) Copy the fabric dat to /fabric/config
-
-```
+# Copy the fabric data to /fabric/config
 # for build the network it's necessary to have any files.
 # this file exist inside a folder in pod fabric-tools.
 
@@ -260,6 +265,40 @@ kubectl get svc
 ```
 
 
+# Delete network
+
+```
+# Delete APP
+
+kubectl delete -f twinbiot-app/
+
+
+# Delete fabric-network
+
+kubectl delete -f fabric-network/
+
+# Delete CA-Server
+
+kubectl delete -f fabric-ca/
+
+
+# Delete Volume Claim
+
+kubectl delete -f volume-claim/
+
+# Delete nfs-server
+
+kubectl delete -f nfs-server/
+
+# Delete the disk.
+
+gcloud compute disks delete --zone=us-central1-c gce-nfs-disk
+
+# Delete cluster
+
+gcloud beta container --project "guminator" clusters delete "twinbiot-cluster" --zone "us-central1-c"
+
+```
 
 
 
