@@ -1,5 +1,5 @@
 #!/bin/bash
-
+infoln "Enroll the CA admin"
 mkdir -p organizations/ordererOrganizations/example.com
 
 export FABRIC_CA_CLIENT_HOME=${PWD}/organizations/ordererOrganizations/example.com
@@ -69,5 +69,6 @@ infoln "Generate the admin msp"
 set -x
 fabric-ca-client enroll -u https://ordererAdmin:ordererAdminpw@ca-orderer:9054 --caname ca-orderer -M ${PWD}/organizations/ordererOrganizations/example.com/users/Admin@example.com/msp --tls.certfiles ${PWD}/organizations/fabric-ca/ordererOrg/tls-cert.pem
 { set +x; } 2>/dev/null
+
 
 cp ${PWD}/organizations/ordererOrganizations/example.com/msp/config.yaml ${PWD}/organizations/ordererOrganizations/example.com/users/Admin@example.com/msp/config.yaml

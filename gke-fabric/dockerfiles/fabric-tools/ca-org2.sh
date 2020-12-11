@@ -1,5 +1,6 @@
 #!/bin/bash
 
+infoln "Enroll the CA admin"
 mkdir -p organizations/peerOrganizations/org2.example.com/
 
 export FABRIC_CA_CLIENT_HOME=${PWD}/organizations/peerOrganizations/org2.example.com/
@@ -76,13 +77,15 @@ set -x
 fabric-ca-client enroll -u https://user1:user1pw@ca-org2:8054 --caname ca-org2 -M ${PWD}/organizations/peerOrganizations/org2.example.com/users/User1@org2.example.com/msp --tls.certfiles ${PWD}/organizations/fabric-ca/org2/tls-cert.pem
 { set +x; } 2>/dev/null
 
-cp ${PWD}/organizations/peerOrganizations/org2.example.com/msp/config.yaml ${PWD}/organizations/peerOrganizations/org2.example.com/users/User1@org2.example.com/msp/config.yaml
 
+cp ${PWD}/organizations/peerOrganizations/org2.example.com/msp/config.yaml ${PWD}/organizations/peerOrganizations/org2.example.com/users/User1@org2.example.com/msp/config.yaml
 mkdir -p organizations/peerOrganizations/org2.example.com/users/Admin@org2.example.com
+
 
 infoln "Generate the org admin msp"
 set -x
 fabric-ca-client enroll -u https://org2admin:org2adminpw@ca-org2:8054 --caname ca-org2 -M ${PWD}/organizations/peerOrganizations/org2.example.com/users/Admin@org2.example.com/msp --tls.certfiles ${PWD}/organizations/fabric-ca/org2/tls-cert.pem
 { set +x; } 2>/dev/null
+
 
 cp ${PWD}/organizations/peerOrganizations/org2.example.com/msp/config.yaml ${PWD}/organizations/peerOrganizations/org2.example.com/users/Admin@org2.example.com/msp/config.yaml

@@ -31,7 +31,7 @@ spec:
       terminationGracePeriodSeconds: 10
       containers:
       - name: twinbiot-explorer-db
-        image: yperledger/explorer-db:latest
+        image: hyperledger/explorer-db:latest
         env:
           - name: DATABASE_DATABASE
             value: fabricexplorer

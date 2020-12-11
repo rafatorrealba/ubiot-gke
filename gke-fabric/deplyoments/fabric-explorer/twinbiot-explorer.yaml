@@ -47,9 +47,9 @@ spec:
           - name: LOG_LEVEL_CONSOLE
             value: info
           - name: LOG_CONSOLE_STDOUT
-            value: true
+            value: "true"
           - name: DISCOVERY_AS_LOCALHOST
-            value: false
+            value: "false"
         ports:
         - containerPort: 8080
           name: explorer

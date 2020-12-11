@@ -1,7 +1,5 @@
 #!/bin/bash
 
-export CORE_PEER_MSPCONFIGPATH=/fabric/config/organizations/peerOrganizations/org1.example.com/users/Admin@org1.example.com/msp
-
 # check peer conection
 peer channel list
 # create channel command
