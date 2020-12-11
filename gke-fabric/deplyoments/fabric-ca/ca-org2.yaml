@@ -1,0 +1,62 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: ca-org2
+  labels:
+    app: ca-org2
+spec:
+  ports:
+  - port: 8054
+    name: ca-org2
+  clusterIP: None
+  selector:
+    app: ca-org2
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: ca-org2
+spec:
+  selector:
+    matchLabels:
+      app: ca-org2 # Label selector that determines which Pods belong to the StatefulSet
+                 # Must match spec: template: metadata: labels
+  serviceName: "ca-org2"
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: ca-org2 # Pod template's label selector
+    spec:
+      terminationGracePeriodSeconds: 10
+      containers:
+      - name:  ca-org2
+        image: gcr.io/guminator/ca-server:1.1
+        command: ["sh", "-c", "fabric-ca-server start -b admin:adminpw -d --port 8054"]
+        env:
+          - name: FABRIC_CA_HOME
+            value: /fabric/config/organizations/fabric-ca/org2
+          - name: FABRIC_CA_SERVER_CA_NAME
+            value: ca-org2
+          - name: FABRIC_CA_SERVER_PORT
+            value: "8054"
+          - name: FABRIC_CA_SERVER_CSR_CN
+            value: "ca-org2"
+          - name: FABRIC_CA_SERVER_CSR_HOSTS
+            value: ca-org2
+          - name: FABRIC_CA_SERVER_TLS_ENABLED
+            value: "true"
+          #- name: FABRIC_CA_SERVER_TLS_CERTFILE
+          #  value: /fabric/config/organizations/peerOrganizations/org2.example.com/ca/ca.org2.example.com-cert.pem
+          #- name: FABRIC_CA_SERVER_TLS_KEYFILE
+          #  value: /fabric/config/organizations/peerOrganizations/org2.example.com/ca/priv_sk
+        ports:
+        - containerPort: 8054
+          name: ca-org2
+        volumeMounts:
+        - name: fabric-config
+          mountPath: /fabric
+      volumes:
+      - name: fabric-config
+        persistentVolumeClaim:
+          claimName: fabric

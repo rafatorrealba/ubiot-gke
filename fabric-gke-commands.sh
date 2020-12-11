@@ -1,8 +1,8 @@
 
 ## Create Cluster ##
 
-gcloud beta container --project "guminator" clusters create "twinbiot-cluster" --zone "us-central1-c" --no-enable-basic-auth --cluster-version "1.16.13-gke.401" --machine-type "e2-small" --image-type "COS" --disk-type "pd-standard" --disk-size "20" --metadata disable-legacy-endpoints=true --scopes "https://www.googleapis.com/auth/devstorage.read_only","https://www.googleapis.com/auth/logging.write","https://www.googleapis.com/auth/monitoring","https://www.googleapis.com/auth/servicecontrol","https://www.googleapis.com/auth/service.management.readonly","https://www.googleapis.com/auth/trace.append" --preemptible --num-nodes "2" --enable-stackdriver-kubernetes --enable-ip-alias --network "projects/guminator/global/networks/default" --subnetwork "projects/guminator/regions/us-central1/subnetworks/default" --default-max-pods-per-node "110" --no-enable-master-authorized-networks --addons HorizontalPodAutoscaling,HttpLoadBalancing --enable-autoupgrade --enable-autorepair --max-surge-upgrade 1 --max-unavailable-upgrade 0
 
+gcloud beta container --project "guminator" clusters create "twinbiot-cluster" --zone "us-central1-c" --no-enable-basic-auth --cluster-version "1.16.15-gke.4300" --machine-type "e2-small" --image-type "cos_containerd" --disk-type "pd-standard" --disk-size "20" --metadata disable-legacy-endpoints=true --scopes "https://www.googleapis.com/auth/devstorage.read_only","https://www.googleapis.com/auth/logging.write","https://www.googleapis.com/auth/monitoring","https://www.googleapis.com/auth/servicecontrol","https://www.googleapis.com/auth/service.management.readonly","https://www.googleapis.com/auth/trace.append" --preemptible --num-nodes "2" --enable-stackdriver-kubernetes --enable-ip-alias --network "projects/guminator/global/networks/default" --subnetwork "projects/guminator/regions/us-central1/subnetworks/default" --default-max-pods-per-node "110" --no-enable-master-authorized-networks --addons HorizontalPodAutoscaling,HttpLoadBalancing --enable-autoupgrade --enable-autorepair --max-surge-upgrade 1 --max-unavailable-upgrade 0
 
 ## Delete Cluster ##
 gcloud beta container --project "guminator" clusters delete "twinbiot-cluster" --zone "us-central1-c"
@@ -56,13 +56,13 @@ cd var/hyperledger/config/
 #export CORE_PEER_ADDRESS=peer0-org1-example-com:7051
 #export CORE_PEER_TLS_ROOTCERT_FILE=/var/hyperledger/config/organizations/peerOrganizations/org1.example.com/peers/peer0.org1.example.com/tls/ca.crt
 
-export CORE_PEER_MSPCONFIGPATH=/var/hyperledger/config/organizations/peerOrganizations/org1.example.com/users/Admin@org1.example.com/msp
+export CORE_PEER_MSPCONFIGPATH=/fabric/config/organizations/peerOrganizations/org1.example.com/users/Admin@org1.example.com/msp
 
 # check peer conection
 peer channel list
 # create channel command
 
-peer channel create -o orderer-example-com:7050 --ordererTLSHostnameOverride orderer-example-com  -c mychannel -f /var/hyperledger/config/channel-artifacts/mychannel.tx --tls --cafile /var/hyperledger/config/organizations/ordererOrganizations/example.com/orderers/orderer.example.com/msp/tlscacerts/tlsca.example.com-cert.pem
+peer channel create -o orderer-example-com:7050 --ordererTLSHostnameOverride orderer-example-com  -c mychannel -f /fabric/config/channel-artifacts/mychannel.tx --tls --cafile /fabric/config/organizations/ordererOrganizations/example.com/orderers/orderer.example.com/msp/tlscacerts/tlsca.example.com-cert.pem
 
 # join org1 to channel
 peer channel join -b  mychannel.block

@@ -12,7 +12,7 @@
 #
 # prepending $PWD/../bin to PATH to ensure we are picking up the correct binaries
 # this may be commented out to resolve installed version of tools if desired
-export PATH=${PWD}/../bin:$PATH
+#export PATH=${PWD}/../bin:$PATH
 export FABRIC_CFG_PATH=${PWD}/configtx
 export VERBOSE=false
 
@@ -21,26 +21,26 @@ source scriptUtils.sh
 # Obtain CONTAINER_IDS and remove them
 # TODO Might want to make this optional - could clear other containers
 # This function is called when you bring a network down
-function clearContainers() {
-  CONTAINER_IDS=$(docker ps -a | awk '($2 ~ /dev-peer.*/) {print $1}')
-  if [ -z "$CONTAINER_IDS" -o "$CONTAINER_IDS" == " " ]; then
-    infoln "No containers available for deletion"
-  else
-    docker rm -f $CONTAINER_IDS
-  fi
-}
+#function clearContainers() {
+#  CONTAINER_IDS=$(docker ps -a | awk '($2 ~ /dev-peer.*/) {print $1}')
+#  if [ -z "$CONTAINER_IDS" -o "$CONTAINER_IDS" == " " ]; then
+#    infoln "No containers available for deletion"
+#  else
+#    docker rm -f $CONTAINER_IDS
+#  fi
+#}
 
 # Delete any images that were generated as a part of this setup
 # specifically the following images are often left behind:
 # This function is called when you bring the network down
-function removeUnwantedImages() {
-  DOCKER_IMAGE_IDS=$(docker images | awk '($1 ~ /dev-peer.*/) {print $3}')
-  if [ -z "$DOCKER_IMAGE_IDS" -o "$DOCKER_IMAGE_IDS" == " " ]; then
-    infoln "No images available for deletion"
-  else
-    docker rmi -f $DOCKER_IMAGE_IDS
-  fi
-}
+#function removeUnwantedImages() {
+#  DOCKER_IMAGE_IDS=$(docker images | awk '($1 ~ /dev-peer.*/) {print $3}')
+#  if [ -z "$DOCKER_IMAGE_IDS" -o "$DOCKER_IMAGE_IDS" == " " ]; then
+#    infoln "No images available for deletion"
+#  else
+#    docker rmi -f $DOCKER_IMAGE_IDS
+#  fi
+#}
 
 # Versions of fabric known not to work with the test network
 NONWORKING_VERSIONS="^1\.0\. ^1\.1\. ^1\.2\. ^1\.3\. ^1\.4\."
@@ -48,62 +48,62 @@ NONWORKING_VERSIONS="^1\.0\. ^1\.1\. ^1\.2\. ^1\.3\. ^1\.4\."
 # Do some basic sanity checking to make sure that the appropriate versions of fabric
 # binaries/images are available. In the future, additional checking for the presence
 # of go or other items could be added.
-function checkPrereqs() {
+#function checkPrereqs() {
   ## Check if your have cloned the peer binaries and configuration files.
-  peer version > /dev/null 2>&1
+#  peer version > /dev/null 2>&1
 
-  if [[ $? -ne 0 || ! -d "../config" ]]; then
-    errorln "Peer binary and configuration files not found.."
-    errorln
-    errorln "Follow the instructions in the Fabric docs to install the Fabric Binaries:"
-    errorln "https://hyperledger-fabric.readthedocs.io/en/latest/install.html"
-    exit 1
-  fi
+#  if [[ $? -ne 0 || ! -d "../config" ]]; then
+#    errorln "Peer binary and configuration files not found.."
+#    errorln
+#    errorln "Follow the instructions in the Fabric docs to install the Fabric Binaries:"
+#    errorln "https://hyperledger-fabric.readthedocs.io/en/latest/install.html"
+#    exit 1
+#  fi
   # use the fabric tools container to see if the samples and binaries match your
   # docker images
-  LOCAL_VERSION=$(peer version | sed -ne 's/ Version: //p')
-  DOCKER_IMAGE_VERSION=$(docker run --rm hyperledger/fabric-tools:$IMAGETAG peer version | sed -ne 's/ Version: //p' | head -1)
+#  LOCAL_VERSION=$(peer version | sed -ne 's/ Version: //p')
+#  DOCKER_IMAGE_VERSION=$(docker run --rm hyperledger/fabric-tools:$IMAGETAG peer version | sed -ne 's/ Version: //p' | head -1)
 
-  infoln "LOCAL_VERSION=$LOCAL_VERSION"
-  infoln "DOCKER_IMAGE_VERSION=$DOCKER_IMAGE_VERSION"
+#  infoln "LOCAL_VERSION=$LOCAL_VERSION"
+#  infoln "DOCKER_IMAGE_VERSION=$DOCKER_IMAGE_VERSION"
 
-  if [ "$LOCAL_VERSION" != "$DOCKER_IMAGE_VERSION" ]; then
-    warnln "Local fabric binaries and docker images are out of  sync. This may cause problems."
-  fi
+#  if [ "$LOCAL_VERSION" != "$DOCKER_IMAGE_VERSION" ]; then
+#    warnln "Local fabric binaries and docker images are out of  sync. This may cause problems."
+#  fi
 
-  for UNSUPPORTED_VERSION in $NONWORKING_VERSIONS; do
-    infoln "$LOCAL_VERSION" | grep -q $UNSUPPORTED_VERSION
-    if [ $? -eq 0 ]; then
-      fatalln "Local Fabric binary version of $LOCAL_VERSION does not match the versions supported by the test network."
-    fi
+#  for UNSUPPORTED_VERSION in $NONWORKING_VERSIONS; do
+#    infoln "$LOCAL_VERSION" | grep -q $UNSUPPORTED_VERSION
+#    if [ $? -eq 0 ]; then
+#      fatalln "Local Fabric binary version of $LOCAL_VERSION does not match the versions supported by the test network."
+#    fi
 
-    infoln "$DOCKER_IMAGE_VERSION" | grep -q $UNSUPPORTED_VERSION
-    if [ $? -eq 0 ]; then
-      fatalln "Fabric Docker image version of $DOCKER_IMAGE_VERSION does not match the versions supported by the test network."
-    fi
-  done
+#    infoln "$DOCKER_IMAGE_VERSION" | grep -q $UNSUPPORTED_VERSION
+#    if [ $? -eq 0 ]; then
+#      fatalln "Fabric Docker image version of $DOCKER_IMAGE_VERSION does not match the versions supported by the test network."
+#    fi
+#  done
 
   ## Check for fabric-ca
-  if [ "$CRYPTO" == "Certificate Authorities" ]; then
+#  if [ "$CRYPTO" == "Certificate Authorities" ]; then
 
-    fabric-ca-client version > /dev/null 2>&1
-    if [[ $? -ne 0 ]]; then
-      errorln "fabric-ca-client binary not found.."
-      errorln
-      errorln "Follow the instructions in the Fabric docs to install the Fabric Binaries:"
-      errorln "https://hyperledger-fabric.readthedocs.io/en/latest/install.html"
-      exit 1
-    fi
-    CA_LOCAL_VERSION=$(fabric-ca-client version | sed -ne 's/ Version: //p')
-    CA_DOCKER_IMAGE_VERSION=$(docker run --rm hyperledger/fabric-ca:$CA_IMAGETAG fabric-ca-client version | sed -ne 's/ Version: //p' | head -1)
-    infoln "CA_LOCAL_VERSION=$CA_LOCAL_VERSION"
-    infoln "CA_DOCKER_IMAGE_VERSION=$CA_DOCKER_IMAGE_VERSION"
+#    fabric-ca-client version > /dev/null 2>&1
+#    if [[ $? -ne 0 ]]; then
+#      errorln "fabric-ca-client binary not found.."
+#      errorln
+#      errorln "Follow the instructions in the Fabric docs to install the Fabric Binaries:"
+#      errorln "https://hyperledger-fabric.readthedocs.io/en/latest/install.html"
+#      exit 1
+#    fi
+#    CA_LOCAL_VERSION=$(fabric-ca-client version | sed -ne 's/ Version: //p')
+#    CA_DOCKER_IMAGE_VERSION=$(docker run --rm hyperledger/fabric-ca:$CA_IMAGETAG fabric-ca-client version | sed -ne 's/ Version: //p' | head -1)
+#    infoln "CA_LOCAL_VERSION=$CA_LOCAL_VERSION"
+#    infoln "CA_DOCKER_IMAGE_VERSION=$CA_DOCKER_IMAGE_VERSION"
 
-    if [ "$CA_LOCAL_VERSION" != "$CA_DOCKER_IMAGE_VERSION" ]; then
-      warnln "Local fabric-ca binaries and docker images are out of sync. This may cause problems."
-    fi
-  fi
-}
+#    if [ "$CA_LOCAL_VERSION" != "$CA_DOCKER_IMAGE_VERSION" ]; then
+#      warnln "Local fabric-ca binaries and docker images are out of sync. This may cause problems."
+#    fi
+#  fi
+#}
 
 # Before you can bring up a network, each organization needs to generate the crypto
 # material that will define that organization on the network. Because Hyperledger
@@ -181,7 +181,7 @@ function createOrgs() {
 
     infoln "Generate certificates using Fabric CA's"
 
-    IMAGE_TAG=${CA_IMAGETAG} docker-compose -f $COMPOSE_FILE_CA up -d 2>&1
+#    IMAGE_TAG=${CA_IMAGETAG} docker-compose -f $COMPOSE_FILE_CA up -d 2>&1
 
     . organizations/fabric-ca/registerEnroll.sh
 
@@ -268,25 +268,25 @@ function createConsortium() {
 # Bring up the peer and orderer nodes using docker compose.
 function networkUp() {
 
-  checkPrereqs
+#  checkPrereqs
   # generate artifacts if they don't exist
   if [ ! -d "organizations/peerOrganizations" ]; then
     createOrgs
     createConsortium
   fi
 
-  COMPOSE_FILES="-f ${COMPOSE_FILE_BASE}"
+#  COMPOSE_FILES="-f ${COMPOSE_FILE_BASE}"
 
-  if [ "${DATABASE}" == "couchdb" ]; then
+#  if [ "${DATABASE}" == "couchdb" ]; then
     COMPOSE_FILES="${COMPOSE_FILES} -f ${COMPOSE_FILE_COUCH}"
-  fi
+#  fi
 
-   IMAGE_TAG=$IMAGETAG docker-compose ${COMPOSE_FILES} up -d 2>&1
+#   IMAGE_TAG=$IMAGETAG docker-compose ${COMPOSE_FILES} up -d 2>&1
 
-  docker ps -a
-  if [ $? -ne 0 ]; then
-    fatalln "Unable to start network"
-  fi
+#  docker ps -a
+#  if [ $? -ne 0 ]; then
+#    fatalln "Unable to start network"
+#  fi
 }
 
 ## call the script to join create the channel and join the peers of org1 and org2
