@@ -1,6 +1,5 @@
 #!/bin/bash
 
-  infoln "Enroll the CA admin"
   mkdir -p organizations/peerOrganizations/org1.example.com/
 
   export FABRIC_CA_CLIENT_HOME=${PWD}/organizations/peerOrganizations/org1.example.com/

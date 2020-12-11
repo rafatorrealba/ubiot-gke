@@ -1,0 +1,52 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: twinbiot-explorer-db
+  labels:
+    app: twinbiot-explorer-db
+spec:
+  ports:
+  - port: 5432
+    name: pgsql
+  clusterIP: None
+  selector:
+    app: twinbiot-explorer-db
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: twinbiot-explorer-db
+spec:
+  selector:
+    matchLabels:
+      app: twinbiot-explorer-db # Label selector that determines which Pods belong to the StatefulSet
+                 # Must match spec: template: metadata: labels
+  serviceName: "twinbiot-explorer-db"
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: twinbiot-explorer-db # Pod template's label selector
+    spec:
+      terminationGracePeriodSeconds: 10
+      containers:
+      - name: twinbiot-explorer-db
+        image: yperledger/explorer-db:latest
+        env:
+          - name: DATABASE_DATABASE
+            value: fabricexplorer
+          - name: DATABASE_USERNAME
+            value: hppoc
+          - name: DATABASE_PASSWORD
+            value: password
+        ports:
+        - containerPort: 5432
+          name: explorer-db
+        volumeMounts:
+        - name: fabric-config
+          mountPath: /var/lib/postgresql/data
+          subPath: /fabric/config/explorer/pgdata
+      volumes:
+      - name: fabric-config
+        persistentVolumeClaim:
+          claimName: fabric

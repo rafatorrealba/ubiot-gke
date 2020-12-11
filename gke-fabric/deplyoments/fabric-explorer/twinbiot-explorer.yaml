@@ -1,0 +1,72 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: twinbiot-explorer
+spec:
+  type: LoadBalancer
+  selector:
+    app: twinbiot-explorer
+  ports:
+  - protocol: TCP
+    port: 8080
+    targetPort: 8080
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: twinbiot-explorer
+spec:
+  selector:
+    matchLabels:
+      app: twinbiot-explorer # Label selector that determines which Pods belong to the StatefulSet
+                 # Must match spec: template: metadata: labels
+  serviceName: "twinbiot-explorer"
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: twinbiot-explorer # Pod template's label selector
+    spec:
+      terminationGracePeriodSeconds: 10
+      containers:
+      - name: twinbiot-explorer
+        image: hyperledger/explorer:latest
+        env:
+          - name: DATABASE_HOST
+            value: twinbiot-explorer-db
+          - name: DATABASE_USERNAME
+            value: hppoc
+          - name: DATABASE_PASSWORD
+            value: password
+          - name: DATABASE_DATABASE
+            value: fabricexplorer
+          - name: LOG_LEVEL_APP
+            value: debug
+          - name: LOG_LEVEL_DB
+            value: debug
+          - name: LOG_LEVEL_CONSOLE
+            value: info
+          - name: LOG_CONSOLE_STDOUT
+            value: true
+          - name: DISCOVERY_AS_LOCALHOST
+            value: false
+        ports:
+        - containerPort: 8080
+          name: explorer
+        volumeMounts:
+        - name: fabric-config
+          mountPath: /opt/explorer/app/platform/fabric/config.json
+          subPath: /fabric/config/explorer/config.json
+        - name: fabric-config
+          mountPath: /opt/explorer/app/platform/fabric/connection-profile
+          subPath: /fabric/config/explorer/connection-profile
+        - name: fabric-config
+          mountPath: /tmp/crypto
+          subPath: /fabric/config/organizations
+        - name: fabric-config
+          mountPath: /opt/wallet
+          subPath: /fabric/config/explorer/walletstore
+      volumes:
+      - name: fabric-config
+        persistentVolumeClaim:
+          claimName: fabric
