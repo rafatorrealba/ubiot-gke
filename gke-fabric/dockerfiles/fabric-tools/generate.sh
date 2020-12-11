@@ -45,11 +45,6 @@ FABRIC_ROOT=$GOPATH/src/github.com/hyperledger/fabric
 
 function generateCerts(){
 
-
-    if [ ! -f $GOPATH/bin/cryptogen ]; then
-        go get github.com/hyperledger/fabric/cmd/cryptogen
-    fi
-
     echo
         echo "##########################################################"
         echo "##### Generate certificates using cryptogen tool #########"
@@ -58,9 +53,9 @@ function generateCerts(){
                 rm -rf ./organizations
         fi
 
-    $GOPATH/bin/cryptogen generate --config=cryptogen/crypto-config-orderer.yaml --output="organizations"
-    $GOPATH/bin/cryptogen generate --config=cryptogen/crypto-config-org1.yaml --output="organizations"
-    $GOPATH/bin/cryptogen generate --config=cryptogen/crypto-config-org2.yaml --output="organizations"
+       cryptogen generate --config=cryptogen/crypto-config-orderer.yaml --output="organizations"
+       cryptogen generate --config=cryptogen/crypto-config-org1.yaml --output="organizations"
+       cryptogen generate --config=cryptogen/crypto-config-org2.yaml --output="organizations"
     echo
 }
 
@@ -71,31 +66,26 @@ function generateChannelArtifacts(){
                 mkdir channel-artifacts
         fi
 
-        if [ ! -f $GOPATH/bin/configtxgen ]; then
-        go get go get github.com/hyperledger/fabric/cmd/configtxgen
-    fi
-
     echo
         echo "#################################################################"
         echo "### Generating channel configuration transaction 'channel.tx' ###"
         echo "#################################################################"
-
-    $GOPATH/bin/configtxgen -configPath configtx -profile TwoOrgsOrdererGenesis -channelID system-channel -outputBlock ./system-genesis-block/genesis.block
-    $GOPATH/bin/configtxgen -configPath configtx -profile TwoOrgsChannel -outputCreateChannelTx ./channel-artifacts/mychannel.tx -channelID mychannel
+        configtxgen -configPath configtx -profile TwoOrgsOrdererGenesis -channelID system-channel -outputBlock ./system-genesis-block/genesis.block
+        configtxgen -configPath configtx -profile TwoOrgsChannel -outputCreateChannelTx ./channel-artifacts/mychannel.tx -channelID mychannel
 
 
     echo
         echo "#################################################################"
         echo "#######    Generating anchor peer update for Org1MSP   ##########"
         echo "#################################################################"
-        $GOPATH/bin/configtxgen -configPath configtx -profile TwoOrgsChannel -outputAnchorPeersUpdate ./channel-artifacts/Org1MSPanchors.tx -channelID mychannel -asOrg Org1MSP
+        configtxgen -configPath configtx -profile TwoOrgsChannel -outputAnchorPeersUpdate ./channel-artifacts/Org1MSPanchors.tx -channelID mychannel -asOrg Org1MSP
 
 
 
         echo "#################################################################"
         echo "#######    Generating anchor peer update for Org2MSP   ##########"
         echo "#################################################################"
-        $GOPATH/bin/configtxgen -configPath configtx -profile TwoOrgsChannel -outputAnchorPeersUpdate ./channel-artifacts/Org2MSPanchors.tx -channelID mychannel -asOrg Org2MSP
+        configtxgen -configPath configtx -profile TwoOrgsChannel -outputAnchorPeersUpdate ./channel-artifacts/Org2MSPanchors.tx -channelID mychannel -asOrg Org2MSP
 
 }
 

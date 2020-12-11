@@ -31,8 +31,8 @@ spec:
       terminationGracePeriodSeconds: 10
       containers:
       - name:  ca-orderer
-        image: gcr.io/guminator/ca-server:1.1
-        
+        image: hyperledger/fabric-ca:1.4.9
+
         command: ["sh", "-c", "fabric-ca-server start -b admin:adminpw -d --port 9054"]
         env:
           - name: FABRIC_CA_HOME

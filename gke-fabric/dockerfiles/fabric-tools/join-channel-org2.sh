@@ -1,6 +1,5 @@
 #!/bin/bash
 
-
 export CORE_PEER_MSPCONFIGPATH=/fabric/config/organizations/peerOrganizations/org2.example.com/users/Admin@org2.example.com/msp
 
 
