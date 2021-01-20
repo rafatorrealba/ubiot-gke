@@ -40,7 +40,7 @@ git clone https://github.com/rafatorrealba/ubiot-gke.git
 
 # go to the workdir 
 
- cd gke-fabric/deployments
+ cd ubiot-gke/gke-fabric/deployments
 
 # deploy the nfs-server.
 
