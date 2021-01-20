@@ -67,7 +67,7 @@ git clone https://github.com/rafatorrealba/ubiot-gke.git
 ```
 # it's a tool that help to create de fabric-structure.
 
-
+kubectl apply -f tools.yaml
 
 # note: this pod may show the state crashlookback or error
 # if this  happens only happens just delete it and recreate it
@@ -201,9 +201,11 @@ cd /fabric/config
 
 exit
 
-kubectl exec -it ca-org2-0 -- bash
+
 
 # for ca-org2
+
+kubectl exec -it ca-org2-0 -- bash
 
 cd /fabric/config
 
@@ -390,7 +392,6 @@ exit
 
 5) Generate channel artifacts, genesis.block and connection.yaml file
 
-
 ```
 kubectl exec -it fabric-tools -- bash
 
@@ -435,7 +436,7 @@ kubectl exec -it peer0-org1-example-com-0 -- sh
 
 cd /fabric/config
 
-export export CORE_PEER_MSPCONFIGPATH=/fabric/config/organizations/peerOrganizations/org1.example.com/users/Admin@org1.example.com/msp
+export CORE_PEER_MSPCONFIGPATH=/fabric/config/organizations/peerOrganizations/org1.example.com/users/Admin@org1.example.com/msp
 
 sh channel-create.sh
 
@@ -480,6 +481,7 @@ sh chaincode-intall.sh
 # ORG2
 # in the same terminal and folder run.
 sh chaincode-intall.sh
+
 # wait until finish the proccess
 
 ```
