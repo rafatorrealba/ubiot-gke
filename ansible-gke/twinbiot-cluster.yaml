@@ -1,0 +1,47 @@
+- name: twinbiot_container_cluster - Creates a GCP Cluster
+  hosts: localhost
+  connection: local
+  gather_facts: false
+  tasks:
+      - name: create a cluster
+        google.cloud.gcp_container_cluster:
+          name: twinbiot-cluster
+          initial_node_count: 1
+          location: us-east1-b
+          project: guminator
+          logging_service: "none"
+          monitoring_service: "none"
+          auth_kind: serviceaccount
+          service_account_file: "service.json"
+          state: present
+        register: cluster
+
+      - name: create a node pool
+        google.cloud.gcp_container_node_pool:
+          name: twinbiot-pool
+          initial_node_count: 2
+          config:
+            image_type: cos_containerd
+            machine_type: n1-standard-4
+            disk_size_gb: 20
+            preemptible: "yes"
+          cluster: "{{ cluster }}"
+          location: us-east1-b
+          project: guminator
+          auth_kind: serviceaccount
+          autoscaling:
+            enabled: "no"
+          service_account_file: "service.json"
+          state: present
+
+      - name: twinbiot-cluster auth
+        shell: |
+          gcloud config set project guminator
+          gcloud container clusters get-credentials twinbiot-cluster --zone us-east1-b --project guminator
+          gcloud compute disks create --size=10GB --zone=us-east1-b gce-nfs-disk
+
+      # Frist Pod NFS Server
+      - name: NFS Server
+        shell: |
+          kubectl apply -f ../gke-fabric/deplyoments/nfs-server/*
+          kubectl apply -f ../gke-fabric/deplyoments/volume-claim/*

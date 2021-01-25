@@ -1,0 +1,35 @@
+- name: twinbiot_container_cluster - Deletes a GCP Cluster
+  hosts: localhost
+  connection: local
+  gather_facts: false
+  tasks:
+    - name: delete twinbiot cluster
+      google.cloud.gcp_container_cluster:
+        name: twinbiot-cluster
+        initial_node_count: 1
+        location: us-central1-a
+        project: guminator
+        logging_service: "none"
+        monitoring_service: "none"
+        auth_kind: serviceaccount
+        service_account_file: "service.json"
+        state: absent
+      register: cluster
+
+    - name: delete node pool
+      google.cloud.gcp_container_node_pool:
+        name: twinbiot-pool
+        initial_node_count: 2
+        config:
+          image_type: cos_containerd
+          machine_type: n1-standard-4
+          disk_size_gb: 20
+          preemptible: "yes"
+        cluster: "{{ cluster }}"
+        location: us-central1-a
+        project: guminator
+        auth_kind: serviceaccount
+        autoscaling:
+          enabled: "no"
+        service_account_file: "service.json"
+        state: absent
