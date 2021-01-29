@@ -36,12 +36,12 @@
 
       - name: twinbiot-cluster auth
         shell: |
-          gcloud config set project guminator
           gcloud container clusters get-credentials twinbiot-cluster --zone us-east1-b --project guminator
           gcloud compute disks create --size=10GB --zone=us-east1-b gce-nfs-disk
+          sleep 10
 
       # Frist Pod NFS Server
       - name: NFS Server
         shell: |
-          kubectl apply -f ../gke-fabric/deplyoments/nfs-server/*
-          kubectl apply -f ../gke-fabric/deplyoments/volume-claim/*
+          kubectl apply -f ../gke-fabric/deplyoments/nfs-server/
+          kubectl apply -f ../gke-fabric/deplyoments/volume-claim/

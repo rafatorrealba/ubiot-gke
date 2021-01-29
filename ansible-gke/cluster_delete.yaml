@@ -3,11 +3,22 @@
   connection: local
   gather_facts: false
   tasks:
-    - name: delete twinbiot cluster
+    - name: Delete Pods
+      shell: |
+        kubectl delete -f ../gke-fabric/deplyoments/nfs-server/
+        kubectl delete -f ../gke-fabric/deplyoments/volume-claim/
+        sleep 10
+
+
+    - name: Delete disk
+      shell: |
+        yes | gcloud compute disks delete --zone=us-east1-b gce-nfs-disk
+
+    - name: delete  cluster
       google.cloud.gcp_container_cluster:
         name: twinbiot-cluster
         initial_node_count: 1
-        location: us-central1-a
+        location: us-east1-b
         project: guminator
         logging_service: "none"
         monitoring_service: "none"
@@ -26,7 +37,7 @@
           disk_size_gb: 20
           preemptible: "yes"
         cluster: "{{ cluster }}"
-        location: us-central1-a
+        location: us-east1-b
         project: guminator
         auth_kind: serviceaccount
         autoscaling:
