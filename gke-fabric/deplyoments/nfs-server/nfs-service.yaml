@@ -3,7 +3,7 @@ kind: Service
 metadata:
   name: nfs-server
 spec:
-  clusterIP: 10.96.0.2
+  clusterIP: 10.56.0.2
   ports:
     - name: nfs
       port: 2049
