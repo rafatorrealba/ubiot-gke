@@ -25,7 +25,7 @@ peers:
       hostnameOverride: peer0-org${ORG}-example-com
 certificateAuthorities:
   ca-org${ORG}:
-    url: https://ca-org:${CAPORT}
+    url: https://ca-org${ORG}:${CAPORT}
     caName: ca-org${ORG}
     tlsCACerts:
       pem:
@@ -34,16 +34,16 @@ certificateAuthorities:
     httpOptions:
       verify: false
 
-#channels:
-#  mychannel:
-#    orderers:
-#      - orderer-example-com
-#    peers:
-#      peer0-org1-example-com:
-#        endorsingPeer: true
-#        chaincodeQuery: true
-#        ledgerQuery: true
-#        eventSource: true
+channels:
+ mychannel:
+   orderers:
+     - orderer-example-com
+   peers:
+     peer0-org1-example-com:
+       endorsingPeer: true
+       chaincodeQuery: true
+       ledgerQuery: true
+       eventSource: true
 
 orderers:
   orderer-example-com:
