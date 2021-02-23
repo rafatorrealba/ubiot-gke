@@ -475,12 +475,12 @@ peer channel list
 # ORG1
 # in the same terminal and folder run.
 
-sh chaincode-intall.sh
+sh chaincode-install.sh
 # wait until finish the proccess
 
 # ORG2
 # in the same terminal and folder run.
-sh chaincode-intall.sh
+sh chaincode-install.sh
 
 # wait until finish the proccess
 
