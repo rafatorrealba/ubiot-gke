@@ -1,0 +1,59 @@
+---
+- name: Create twinbiot network
+  hosts: localhost
+  connection: local
+  gather_facts: false
+
+# First deploy the shared storage with nfs-server
+  tasks:
+    - name: Deploy Fabric-Tools
+      shell: |
+        kubectl apply -f ../gke-fabric/deplyoments/nfs-server/nfs-server.yaml
+        kubectl apply -f ../gke-fabric/deplyoments/nfs-server/nfs-service.yaml
+        sleep 10
+        kubectl apply -f ../gke-fabric/deplyoments/volume-claim/pvc.yaml
+        sleep 10
+        kubectl apply -f ../gke-fabric/deplyoments/tools.yaml
+        sleep 10
+
+# Generate the workdir
+    - name: Generate workdir
+      community.kubernetes.k8s_exec:
+        namespace: default
+        pod: fabric-tools
+        command: |
+          bash fabric-config.sh
+
+
+    - name: Deploy Fabric CA
+      shell: |
+        kubectl apply -f ../gke-fabric/deplyoments/fabric-ca/
+        sleep 20
+
+    - name: generate credentials ca-org1
+      community.kubernetes.k8s_exec:
+        namespace: default
+        pod: ca-org1-0
+        command: |
+          sh ca-org1.sh
+
+    - name: generate credentials ca-org2
+      community.kubernetes.k8s_exec:
+        namespace: default
+        pod: ca-org2-0
+        command: |
+          sh ca-org2.sh
+
+    - name: generate credentials ca-orderer
+      community.kubernetes.k8s_exec:
+        namespace: default
+        pod: ca-orderer-0
+        command: |
+          sh ca-orderer.sh
+
+    - name: Deploy Fabric Tools again
+      shell: |
+        kubectl delete -f ../gke-fabric/deplyoments/tools.yaml
+        sleep 20
+        kubectl apply -f ../gke-fabric/deplyoments/tools2.yaml
+        sleep 10

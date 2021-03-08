@@ -9,8 +9,8 @@
           initial_node_count: 1
           location: us-east1-b
           project: guminator
-          logging_service: "none"
-          monitoring_service: "none"
+          logging_service: "yes"
+          monitoring_service: "yes"
           auth_kind: serviceaccount
           service_account_file: "service.json"
           state: present
